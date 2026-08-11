@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wf2f.in/sitemap.xml
