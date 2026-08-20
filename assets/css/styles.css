@@ -243,8 +243,14 @@ p{margin:0 0 1.1em}
 @media(min-width:820px){.gal{grid-template-columns:repeat(4,1fr)}}
 .gal a{display:block;overflow:hidden;background:var(--paper);border-radius:2px;border:1px solid var(--line)}
 .gal img{width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .6s var(--ease)}
+/* Product tiles letterbox rather than crop. Cover was cutting up to 19% off
+   the full-length garment shots and 44% off the landscape home-linen frames.
+   The mat is the card tone, so the tiles read as framed cards. */
 .gal--prod{grid-template-columns:repeat(2,1fr)}
-.gal--prod img{aspect-ratio:3/4}
+.gal--prod a{background:var(--paper);border:1px solid var(--line)}
+.gal--prod img{aspect-ratio:3/4;object-fit:contain;background:var(--paper)}
+.gal--prod.gal--wide img{aspect-ratio:1/1}
+.gal--prod a:hover img{transform:scale(1.02)}
 @media(min-width:620px){.gal--prod{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:980px){.gal--prod{grid-template-columns:repeat(4,1fr)}}
 .gal a:hover img{transform:scale(1.04)}

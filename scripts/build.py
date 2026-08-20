@@ -102,8 +102,11 @@ def prodgrid(items, label):
         out.append('<a href="assets/img/%s.jpg" data-w="%d" data-h="%d" data-cap="%s">%s</a>'
                    % (name,w,h,html.escape(alt),
                       pic(name,alt,sizes="(min-width:980px) 24vw, (min-width:620px) 46vw, 92vw")))
-    return ('<div class="gal gal--prod" data-showcase data-set="products" data-label="%s">%s</div>'
-            % (label, "".join(out)))
+    # Home & Accessories mixes landscape linen with portrait bags, so it gets
+    # square tiles; the garment tabs stay 3:4.
+    wide = " gal--wide" if "Home" in label else ""
+    return ('<div class="gal gal--prod%s" data-showcase data-set="products" data-label="%s">%s</div>'
+            % (wide, label, "".join(out)))
 
 def carousel(cid, items):
     return ('<div class="carousel" data-carousel>'
