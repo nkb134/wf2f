@@ -173,16 +173,142 @@ if (!reduced) {
   }).catch(() => {});
 }
 
-/* ------------------------------ lightbox -------------------------------- */
-if (document.querySelector('[data-pswp]')) {
-  import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js')
-    .then(({ default: PhotoSwipeLightbox }) => {
-      new PhotoSwipeLightbox({
-        gallery: '[data-pswp]', children: 'a', bgOpacity: 0.96,
-        pswpModule: () => import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js')
-      }).init();
-    }).catch(() => {});
-}
+/* ------------------------------ showcase viewer -------------------------
+   Replaces the old lightbox. Galleries sharing a data-set become one viewer;
+   each gallery contributes a category tab. Falls back to the plain image
+   link when JavaScript is unavailable.                                     */
+(() => {
+  const gals = [...document.querySelectorAll('[data-showcase]')];
+  if (!gals.length) return;
+
+  const sets = {};
+  gals.forEach(g => (sets[g.dataset.set] ||= []).push(g));
+
+  const el = document.createElement('div');
+  el.className = 'show';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
+  el.setAttribute('aria-label', 'Image viewer');
+  el.innerHTML = `
+    <div class="show__bar">
+      <div class="show__tabs" role="tablist"></div>
+      <span class="show__count"></span>
+      <button class="show__x" type="button" aria-label="Close viewer">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+    <div class="show__stage">
+      <button class="show__nav show__nav--prev" type="button" aria-label="Previous image">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+          <path d="M15 5l-7 7 7 7"/></svg></button>
+      <figure class="show__fig"><img alt=""><figcaption class="show__cap"></figcaption></figure>
+      <button class="show__nav show__nav--next" type="button" aria-label="Next image">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+          <path d="M9 5l7 7-7 7"/></svg></button>
+    </div>`;
+  document.body.appendChild(el);
+
+  const tabsWrap = el.querySelector('.show__tabs');
+  const img = el.querySelector('.show__fig img');
+  const cap = el.querySelector('.show__cap');
+  const count = el.querySelector('.show__count');
+  const prev = el.querySelector('.show__nav--prev');
+  const next = el.querySelector('.show__nav--next');
+
+  let group = [], gi = 0, i = 0, opener = null;
+
+  const shots = g => [...g.querySelectorAll('a')].map(a => ({
+    src: a.getAttribute('href'),
+    cap: a.dataset.cap || '',
+    w: a.dataset.w, h: a.dataset.h
+  }));
+
+  function render() {
+    const items = shots(group[gi]);
+    const it = items[i];
+    if (!it) return;
+    img.src = it.src;
+    img.alt = it.cap;
+    if (it.w && it.h) { img.width = it.w; img.height = it.h; }
+    cap.textContent = it.cap;
+    count.textContent = `${i + 1} / ${items.length}`;
+    prev.disabled = i === 0;
+    next.disabled = i === items.length - 1;
+    [...tabsWrap.children].forEach((t, n) => t.setAttribute('aria-selected', String(n === gi)));
+  }
+
+  function buildTabs() {
+    tabsWrap.innerHTML = '';
+    if (group.length < 2) return;                 // a single gallery needs no tabs
+    group.forEach((g, n) => {
+      const b = document.createElement('button');
+      b.className = 'show__tab';
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.innerHTML = g.dataset.label || `Set ${n + 1}`;
+      b.addEventListener('click', () => { gi = n; i = 0; render(); });
+      tabsWrap.appendChild(b);
+    });
+  }
+
+  function open(gallery, index) {
+    group = sets[gallery.dataset.set];
+    gi = group.indexOf(gallery);
+    i = index;
+    opener = document.activeElement;
+    buildTabs();
+    render();
+    el.setAttribute('open', '');
+    document.body.classList.add('show-open');
+    el.querySelector('.show__x').focus();
+  }
+
+  function close() {
+    el.removeAttribute('open');
+    document.body.classList.remove('show-open');
+    img.removeAttribute('src');
+    if (opener && opener.focus) opener.focus();
+  }
+
+  const step = d => {
+    const items = shots(group[gi]);
+    const n = i + d;
+    if (n >= 0 && n < items.length) { i = n; render(); }
+  };
+
+  gals.forEach(g => g.addEventListener('click', e => {
+    const a = e.target.closest('a');
+    if (!a || !g.contains(a)) return;
+    e.preventDefault();
+    open(g, [...g.querySelectorAll('a')].indexOf(a));
+  }));
+
+  prev.addEventListener('click', () => step(-1));
+  next.addEventListener('click', () => step(1));
+  el.querySelector('.show__x').addEventListener('click', close);
+  el.addEventListener('click', e => { if (e.target === el || e.target.classList.contains('show__stage')) close(); });
+  document.addEventListener('keydown', e => {
+    if (!el.hasAttribute('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+    else if (e.key === 'Tab') {                   // keep focus inside the dialog
+      const f = [...el.querySelectorAll('button:not([disabled])')];
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  let x0 = null;
+  el.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 45) step(dx < 0 ? 1 : -1);
+    x0 = null;
+  }, { passive: true });
+})();
 
 /* ------------------------------ enquiry form ---------------------------- */
 const form = document.getElementById('enquiry');

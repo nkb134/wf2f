@@ -45,9 +45,9 @@ def gallery(items):
     out = []
     for name, alt in items:
         w, h = DIMS[name]
-        out.append('<a href="assets/img/%s.jpg" data-pswp-width="%d" data-pswp-height="%d" '
-                   'target="_blank" rel="noreferrer">%s</a>'
-                   % (name, w, h, pic(name, alt, sizes="(min-width:820px) 24vw, 48vw")))
+        out.append('<a href="assets/img/%s.jpg" data-w="%d" data-h="%d" data-cap="%s">%s</a>'
+                   % (name, w, h, html.escape(alt),
+                      pic(name, alt, sizes="(min-width:820px) 24vw, 48vw")))
     return "".join(out)
 
 LOGO_FILES = {"Cloth &amp; Co":"cloth-and-co","La-Eva":"la-eva",
@@ -93,16 +93,17 @@ def clientwall():
 def marketgrid():
     return "".join('<div class="market"><b>%s</b><span>%s</span></div>' % (n, d) for n, d in MARKETS)
 
-def prodgrid(items):
-    """Static, browsable grid — every image opens in the lightbox. Used on the
-    Products page, where people are comparing pieces rather than glancing."""
+def prodgrid(items, label):
+    """Static, browsable grid. Clicking opens the showcase viewer; the href is
+    the plain image so it still works with JavaScript off."""
     out=[]
     for name,alt in items:
         w,h=DIMS[name]
-        out.append('<a href="assets/img/%s.jpg" data-pswp-width="%d" data-pswp-height="%d" '
-                   'target="_blank" rel="noreferrer">%s</a>'
-                   % (name,w,h,pic(name,alt,sizes="(min-width:980px) 24vw, (min-width:620px) 46vw, 92vw")))
-    return '<div class="gal gal--prod" data-pswp>%s</div>' % "".join(out)
+        out.append('<a href="assets/img/%s.jpg" data-w="%d" data-h="%d" data-cap="%s">%s</a>'
+                   % (name,w,h,html.escape(alt),
+                      pic(name,alt,sizes="(min-width:980px) 24vw, (min-width:620px) 46vw, 92vw")))
+    return ('<div class="gal gal--prod" data-showcase data-set="products" data-label="%s">%s</div>'
+            % (label, "".join(out)))
 
 def carousel(cid, items):
     return ('<div class="carousel" data-carousel>'
@@ -155,8 +156,7 @@ def page(slug, title, desc, body, pswp=False):
         parts.append('<a href="%s"%s>%s</a>' % (h, cur, t))
     nav = "".join(parts)
     canon = SITE + "/" + ("" if slug == "index.html" else slug)
-    pswp_css = ('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">'
-                if pswp else "")
+    pswp_css = ""
     return """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -316,7 +316,8 @@ TABS_TPL = ('<div data-tabs>'
  '<div class="panel" id="p-hm" role="tabpanel" aria-labelledby="t-hm" hidden>%s</div>'
  '</div>')
 
-TABS = TABS_TPL % (prodgrid(APPAREL), prodgrid(RESORT), prodgrid(HOME))
+TABS = TABS_TPL % (prodgrid(APPAREL, "Apparel"), prodgrid(RESORT, "Prints &amp; Resort"),
+                   prodgrid(HOME, "Home &amp; Accessories"))
 TABS_BAND = TABS_TPL.replace('id="t-ap"','id="b-ap"').replace('aria-controls="p-ap"','aria-controls="q-ap"')\
     .replace('id="t-re"','id="b-re"').replace('aria-controls="p-re"','aria-controls="q-re"')\
     .replace('id="t-hm"','id="b-hm"').replace('aria-controls="p-hm"','aria-controls="q-hm"')\
@@ -353,7 +354,7 @@ HOME_PAGE = """
   </div>
 </section>
 
-<section class="wrap" style="padding-bottom:var(--s-m)">%(keys)s</section>
+<section class="wrap">%(keys)s</section>
 
 <section class="section">
   <div class="wrap">
@@ -392,7 +393,7 @@ HOME_PAGE = """
   <div class="wrap">
     <span class="eyebrow" data-rise>Inside the unit</span>
     <h2 data-rise style="margin-bottom:2rem">Where it<br>is made</h2>
-    <div class="gal" data-pswp data-rise>%(gal)s</div>
+    <div class="gal" data-showcase data-set="unit" data-label="Inside the unit" data-rise>%(gal)s</div>
   </div>
 </section>
 
@@ -465,7 +466,7 @@ CAPS_PAGE = """
   </div>
 </section>
 
-<section class="wrap" style="padding-bottom:var(--s-m)">%(keys)s</section>
+<section class="wrap">%(keys)s</section>
 
 <section class="section section--tint">
   <div class="wrap">
@@ -505,7 +506,7 @@ CAPS_PAGE = """
 <section class="section">
   <div class="wrap">
     <span class="eyebrow" data-rise>Inside the unit</span>
-    <div class="gal" data-pswp data-rise style="margin-top:1.5rem">%(gal)s</div>
+    <div class="gal" data-showcase data-set="unit" data-label="Inside the unit" data-rise style="margin-top:1.5rem">%(gal)s</div>
   </div>
 </section>
 %(cta)s
@@ -524,7 +525,7 @@ ABOUT_PAGE = """
   </div>
 </section>
 
-<section class="wrap" style="padding-bottom:var(--s-m)">
+<section class="wrap">
   <div data-rise>%(hero)s</div>
 </section>
 
@@ -572,7 +573,7 @@ ABOUT_PAGE = """
 
 <section class="section">
   <div class="wrap">
-    <div class="gal" data-pswp data-rise>%(gal)s</div>
+    <div class="gal" data-showcase data-set="unit" data-label="Inside the unit" data-rise>%(gal)s</div>
   </div>
 </section>
 %(cta)s

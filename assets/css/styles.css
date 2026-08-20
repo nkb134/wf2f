@@ -278,7 +278,10 @@ p{margin:0 0 1.1em}
 @media(min-width:620px){.form__row{grid-template-columns:1fr 1fr}}
 
 /* ---------------- footer ---------------- */
-.ftr{background:var(--ink);color:var(--bg);padding-block:var(--s-m) 1.75rem;margin-top:var(--s-l)}
+.ftr{background:var(--ink);color:var(--bg);padding-block:var(--s-m) 1.75rem}
+/* The closing CTA section is also dark. Without this the footer's own top
+   margin showed a band of linen between two dark blocks. */
+.section--ink + .ftr{padding-top:var(--s-s)}
 .ftr a{color:var(--bg);text-decoration:none;border-bottom:1px solid rgba(247,244,239,.34)}
 .ftr a:hover{border-bottom-color:var(--terra)}
 .ftr img{height:70px;width:auto;margin-bottom:1.4rem}
@@ -313,3 +316,44 @@ p{margin:0 0 1.1em}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
+
+/* ---------------- showcase viewer ----------------
+   Replaces the lightbox: arrows, category tabs, keyboard and swipe. */
+.show{position:fixed;inset:0;z-index:200;display:none;background:rgba(31,30,28,.97);
+  color:var(--bg);flex-direction:column}
+.show[open]{display:flex}
+.show__bar{display:flex;align-items:center;gap:.75rem;padding:.7rem clamp(.75rem,2vw,1.5rem);
+  border-bottom:1px solid rgba(247,244,239,.14);flex-wrap:wrap}
+.show__tabs{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;margin-right:auto}
+.show__tabs::-webkit-scrollbar{display:none}
+.show__tab{flex:0 0 auto;font-family:var(--f-d);font-weight:600;font-size:.68rem;letter-spacing:.11em;
+  text-transform:uppercase;padding:.6rem 1rem;min-height:44px;border-radius:100px;cursor:pointer;
+  background:transparent;border:1px solid rgba(247,244,239,.32);color:var(--bg);transition:all .2s}
+.show__tab:hover{border-color:var(--bg)}
+.show__tab[aria-selected="true"]{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+.show__count{font-family:var(--f-d);font-weight:600;font-size:.7rem;letter-spacing:.12em;
+  color:var(--on-dark);font-variant-numeric:tabular-nums;white-space:nowrap}
+.show__x{width:44px;height:44px;flex:0 0 auto;border:1px solid rgba(247,244,239,.32);border-radius:100px;
+  background:transparent;color:var(--bg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.show__x:hover{background:var(--bg);color:var(--ink)}
+.show__stage{flex:1;display:flex;align-items:center;justify-content:center;gap:clamp(.4rem,2vw,1.5rem);
+  padding:clamp(.75rem,2.5vw,2rem);min-height:0}
+.show__fig{margin:0;flex:1;min-width:0;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:.9rem}
+.show__fig img{max-width:100%;max-height:100%;min-height:0;object-fit:contain;border-radius:2px;
+  background:var(--paper)}
+.show__cap{font-size:.86rem;color:var(--on-dark);text-align:center;max-width:56ch}
+.show__nav{width:clamp(44px,5vw,56px);height:clamp(44px,5vw,56px);flex:0 0 auto;border-radius:100px;
+  border:1px solid rgba(247,244,239,.32);background:transparent;color:var(--bg);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;transition:all .2s}
+.show__nav:hover{background:var(--bg);color:var(--ink)}
+.show__nav[disabled]{opacity:.28;cursor:default}
+.show__nav[disabled]:hover{background:transparent;color:var(--bg)}
+body.show-open{overflow:hidden}
+@media(max-width:620px){
+  .show__stage{padding:.6rem;gap:.3rem}
+  .show__nav{position:absolute;bottom:1.1rem;z-index:2;background:rgba(31,30,28,.72)}
+  .show__nav--prev{left:1rem}
+  .show__nav--next{right:1rem}
+  .show__cap{font-size:.8rem}
+}
