@@ -254,13 +254,13 @@ def page(slug, title, desc, body, pswp=False):
 
 # ------------------------------------------------------------------ content
 
-APPAREL = [("ap-01","Black midi dress with gathered sleeves"),
- ("ap-02","Tailored black blazer and trousers"),("ap-03","Oversized white cotton shirt"),
- ("ap-04","White shirt worn with straight-leg denim"),("ap-05","Sleeveless white overshirt"),
- ("ap-06","Indigo belted jacket and shorts co-ord"),("ap-07","Denim workwear jacket and jeans"),
- ("ap-08","Black cotton dress with puff sleeves"),("ap-09","Oversized linen blazer"),
- ("ap-10","Striped waistcoat and matching trousers"),("ap-11","Black cotton midi sundress"),
- ("ap-12","Long-line stone trench coat"),("ap-13","White cotton shirt with open back detail")]
+APPAREL = [("ap-01","Black midi dress with gathered sleeves"), ("ap-10","Striped waistcoat and matching trousers"),
+ ("ap-12","Long-line stone trench coat"), ("ap-13","White cotton shirt with open back detail"),
+ ("ap-03","Oversized white cotton shirt"), ("ap-11","Black cotton midi sundress"),
+ ("ap-06","Indigo belted jacket and shorts co-ord"), ("ap-05","Sleeveless white overshirt"),
+ ("ap-08","Black cotton dress with puff sleeves"), ("ap-09","Oversized linen blazer"),
+ ("ap-04","White shirt worn with straight-leg denim"), ("ap-02","Tailored black blazer and trousers"),
+ ("ap-07","Denim workwear jacket and jeans")]
 
 RESORT = [("re-01","Block-printed co-ord photographed on location"),
  ("re-02","Ikat print kaftan dress"),("re-03","Ikat print shirt, flat lay"),
