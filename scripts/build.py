@@ -83,6 +83,30 @@ def prodband(items):
             '%s<span aria-hidden="true" style="display:contents">%s</span>'
             '</div></div>') % (figs, figs)
 
+IG = "https://www.instagram.com/wftofashion/"
+LI = "https://www.linkedin.com/in/women-fiber-to-fashion-107574148/"
+
+def socials(cls=""):
+    """Instagram and LinkedIn as outlined glyphs at matching stroke weight, so
+    they read as one set rather than two borrowed brand marks. Each carries a
+    visible label for screen readers."""
+    ig = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+          'aria-hidden="true" focusable="false">'
+          '<rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4"/>'
+          '<circle cx="12" cy="12" r="4.15"/>'
+          '<circle cx="17.5" cy="6.6" r="1.15" fill="currentColor" stroke="none"/></svg>')
+    li = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
+          'aria-hidden="true" focusable="false">'
+          '<rect x="2.6" y="2.6" width="18.8" height="18.8" rx="3.4"/>'
+          '<circle cx="7.35" cy="7.6" r="1.1" fill="currentColor" stroke="none"/>'
+          '<path d="M7.35 10.7V17.4" stroke-linecap="round"/>'
+          '<path d="M11.4 17.4v-6.7M11.4 13.6c0-1.75 1.05-2.95 2.7-2.95s2.5 1.2 2.5 2.95v3.8" '
+          'stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    return ('<ul class="social %s">'
+            '<li><a href="%s" rel="noopener" aria-label="Women Fiber to Fashion on Instagram">%s</a></li>'
+            '<li><a href="%s" rel="noopener" aria-label="Women Fiber to Fashion on LinkedIn">%s</a></li>'
+            '</ul>') % (cls, IG, ig, LI, li)
+
 def clientwall():
     # 12 cells keeps the grid whole at 2, 3 and 4 columns — no orphan gap
     cells = ['<div class="client"><b>%s</b><span>%s</span></div>' % (n, c) for n, c in CLIENTS]
@@ -231,10 +255,8 @@ def page(slug, title, desc, body, pswp=False):
         <ul>
           <li><a href="mailto:sales@wf2f.in">sales@wf2f.in</a></li>
           <li><a href="contact.html">Send an enquiry</a></li>
-          <li><a href="https://www.instagram.com/wftofashion/" rel="noopener">Instagram</a></li>
-          <li><a href="https://www.linkedin.com/in/women-fiber-to-fashion-107574148/" rel="noopener">LinkedIn</a></li>
-          <li><a href="assets/docs/wftf-company-profile.pdf">Company profile (PDF)</a></li>
         </ul>
+        %(socials)s
       </div>
     </div>
     <div class="ftr__base">
@@ -253,7 +275,7 @@ def page(slug, title, desc, body, pswp=False):
 </body>
 </html>
 """ % {"title": html.escape(title), "desc": html.escape(desc), "canon": canon,
-       "site": SITE, "pswp": pswp_css, "schema": schema(), "nav": nav, "body": body}
+       "site": SITE, "pswp": pswp_css, "schema": schema(), "nav": nav, "body": body, "socials": socials("social--ftr")}
 
 # ------------------------------------------------------------------ content
 
@@ -639,17 +661,15 @@ CONTACT_PAGE = """
       <span class="eyebrow" style="margin-top:2rem">Markets</span>
       <p class="muted">USA &middot; Europe &middot; Australia &amp; New Zealand &middot; India</p>
       <span class="eyebrow" style="margin-top:2rem">Elsewhere</span>
-      <ul style="list-style:none;padding:0;margin:0;display:grid;gap:.5rem">
-        <li><a href="https://www.instagram.com/wftofashion/" rel="noopener">Instagram</a></li>
-        <li><a href="https://www.linkedin.com/in/women-fiber-to-fashion-107574148/" rel="noopener">LinkedIn</a></li>
-        <li><a href="assets/docs/wftf-company-profile.pdf">Company profile (PDF)</a></li>
-      </ul>
+      SOCIALBLOCK
       <span class="eyebrow" style="margin-top:2rem">Response time</span>
       <p class="muted">Usually within two working days.</p>
     </div>
   </div>
 </section>
 """
+
+CONTACT_PAGE = CONTACT_PAGE.replace("SOCIALBLOCK", socials())
 
 NOTFOUND = """
 <section class="section" style="min-height:54vh">

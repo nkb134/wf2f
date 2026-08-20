@@ -363,3 +363,13 @@ body.show-open{overflow:hidden}
   .show__nav--next{right:1rem}
   .show__cap{font-size:.8rem}
 }
+
+/* ---------------- social glyphs ---------------- */
+.social{list-style:none;display:flex;gap:.55rem;margin:1.1rem 0 0;padding:0}
+.social a{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
+  border:1px solid var(--line-2);border-radius:100px;color:var(--ink);text-decoration:none;
+  transition:background .2s,border-color .2s,color .2s}
+.social a:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.social svg{width:19px;height:19px;display:block}
+.social--ftr a{border-color:rgba(247,244,239,.34);color:var(--bg)}
+.social--ftr a:hover{background:var(--bg);border-color:var(--bg);color:var(--ink)}
