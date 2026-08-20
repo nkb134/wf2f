@@ -3,3 +3,9 @@
 node_modules/
 .vscode/
 .idea/
+.claude/
+
+# Original photography — kept locally, not published
+assets/Website images/
+# Competitor reference material, not ours to host
+BEOM EXPORT_ (1).pdf
