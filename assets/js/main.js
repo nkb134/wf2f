@@ -51,6 +51,13 @@ if (rise.length) {
       });
     }, { rootMargin: '0px 0px -6% 0px', threshold: 0.04 });
     rise.forEach((el, i) => {
+      // Anything already at or above the fold — a restored scroll position, an
+      // anchor link, a short page — is shown at once rather than waiting for an
+      // intersection event that has already been and gone.
+      if (el.getBoundingClientRect().top < innerHeight) {
+        el.classList.add('is-in');
+        return;
+      }
       el.style.transitionDelay = `${Math.min(i % 5, 4) * 55}ms`;
       io.observe(el);
     });

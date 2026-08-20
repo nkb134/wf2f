@@ -141,6 +141,7 @@ def page(slug, title, desc, body, pswp=False):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Karla:wght@400;500&display=swap" rel="stylesheet">
 %(pswp)s
+<script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="assets/css/styles.css">
 <script type="application/ld+json">
 %(schema)s
@@ -277,7 +278,7 @@ CTA = ('<section class="section section--ink" id="contact-cta">'
  '<p class="muted" style="max-width:48ch;margin-top:1.4rem">Send your tech pack, quantities and '
  'timings. We will come back with an honest answer on whether we are the right unit for it.</p>'
  '<div class="btns"><a class="btn" href="contact.html" '
- 'style="background:#fff;color:#1A1714;border-color:#fff">Request a quote</a>'
+ 'style="background:#fff;color:#111111;border-color:#fff">Request a quote</a>'
  '<a class="btn" href="mailto:sales@wf2f.in" '
  'style="background:transparent;color:#fff;border-color:rgba(255,255,255,.5)">sales@wf2f.in</a>'
  '</div></div></section>')
@@ -295,7 +296,7 @@ HOME_PAGE = """
         <a class="btn btn--ghost" href="capabilities.html">Our capabilities</a>
       </div>
     </div>
-    <div class="hero__img" data-rise>%(hero)s</div>
+    <div class="hero__img">%(hero)s</div>
   </div>
 </section>
 
