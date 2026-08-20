@@ -11,6 +11,7 @@ import html, json, pathlib
 SITE = "https://wf2f.in"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DIMS = json.loads((ROOT / "scripts" / "dims.json").read_text())
+LOGODIMS = json.loads((ROOT / "scripts" / "logodims.json").read_text())
 
 NAV = [("products.html", "Products"), ("capabilities.html", "Capabilities"),
        ("about.html", "About")]
@@ -48,6 +49,37 @@ def gallery(items):
                    'target="_blank" rel="noreferrer">%s</a>'
                    % (name, w, h, pic(name, alt, sizes="(min-width:820px) 24vw, 48vw")))
     return "".join(out)
+
+LOGO_FILES = {"Cloth &amp; Co":"cloth-and-co","La-Eva":"la-eva",
+ "Loft &amp; Daughter":"loft-and-daughter","Uvaacha Studio":"uvaacha","Arohi":"arohi"}
+
+def logoband():
+    """Auto-scrolling client band. Real logo files where we have them, set
+    wordmarks for the rest, all silhouetted to ink so the row reads as one."""
+    items = []
+    for name, _country in CLIENTS:
+        f = LOGO_FILES.get(name)
+        if f:
+            w, h = LOGODIMS[f]
+            # explicit dimensions reserve the box so the band never shifts as
+            # logos arrive; the band sits high enough to load eagerly
+            items.append('<img src="assets/img/clients/%s.png" alt="%s" width="%d" height="%d" '
+                         'loading="eager" decoding="async">'
+                         % (f, name.replace("&amp;", "and"), w, h))
+        else:
+            items.append('<span class="wordmark">%s</span>' % name)
+    run = "".join(items)
+    # duplicated once so translateX(-50%) loops seamlessly; the copy is hidden
+    # from assistive tech so the list is not announced twice
+    return ('<div class="marquee logoband marquee--tint"><div class="marquee__track">'
+            '%s<span aria-hidden="true" style="display:contents">%s</span>'
+            '</div></div>') % (run, run)
+
+def prodband(items):
+    figs = "".join('<figure>%s</figure>' % pic(n, a, sizes="260px") for n, a in items)
+    return ('<div class="marquee prodband"><div class="marquee__track">'
+            '%s<span aria-hidden="true" style="display:contents">%s</span>'
+            '</div></div>') % (figs, figs)
 
 def clientwall():
     # 12 cells keeps the grid whole at 2, 3 and 4 columns — no orphan gap
@@ -177,7 +209,6 @@ def page(slug, title, desc, body, pswp=False):
         <h4>Women Fiber to Fashion</h4>
         <p style="max-width:38ch">Garment manufacturing in New Delhi, India. Womenswear,
         menswear, home linen and accessories &mdash; made to order, shipped worldwide.</p>
-        <p class="muted" style="font-size:.86rem;max-width:38ch">Made by the Brave. Built on Defiance.</p>
       </div>
       <div>
         <h4>Get in touch</h4>
@@ -261,7 +292,7 @@ KEYS = ('<div class="keys" data-rise>'
  '<div class="key"><b>50+</b><span>Sewing machines</span></div>'
  '<div class="key"><b>4</b><span>Markets served</span></div></div>')
 
-TABS = ('<div data-tabs>'
+TABS_TPL = ('<div data-tabs>'
  '<div class="tabs" role="tablist" aria-label="Product categories">'
  '<button class="tab" role="tab" id="t-ap" aria-controls="p-ap" aria-selected="true">Apparel</button>'
  '<button class="tab" role="tab" id="t-re" aria-controls="p-re" aria-selected="false" tabindex="-1">Prints &amp; Resort</button>'
@@ -270,7 +301,16 @@ TABS = ('<div data-tabs>'
  '<div class="panel" id="p-ap" role="tabpanel" aria-labelledby="t-ap">%s</div>'
  '<div class="panel" id="p-re" role="tabpanel" aria-labelledby="t-re" hidden>%s</div>'
  '<div class="panel" id="p-hm" role="tabpanel" aria-labelledby="t-hm" hidden>%s</div>'
- '</div>') % (carousel("ap", APPAREL), carousel("re", RESORT), carousel("hm", HOME))
+ '</div>')
+
+TABS = TABS_TPL % (carousel("ap", APPAREL), carousel("re", RESORT), carousel("hm", HOME))
+TABS_BAND = TABS_TPL.replace('id="t-ap"','id="b-ap"').replace('aria-controls="p-ap"','aria-controls="q-ap"')\
+    .replace('id="t-re"','id="b-re"').replace('aria-controls="p-re"','aria-controls="q-re"')\
+    .replace('id="t-hm"','id="b-hm"').replace('aria-controls="p-hm"','aria-controls="q-hm"')\
+    .replace('id="p-ap" role="tabpanel" aria-labelledby="t-ap"','id="q-ap" role="tabpanel" aria-labelledby="b-ap"')\
+    .replace('id="p-re" role="tabpanel" aria-labelledby="t-re"','id="q-re" role="tabpanel" aria-labelledby="b-re"')\
+    .replace('id="p-hm" role="tabpanel" aria-labelledby="t-hm"','id="q-hm" role="tabpanel" aria-labelledby="b-hm"')\
+    % (prodband(APPAREL), prodband(RESORT), prodband(HOME))
 
 CTA = ('<section class="section section--ink" id="contact-cta">'
  '<div class="wrap"><span class="eyebrow">Start a conversation</span>'
@@ -278,7 +318,7 @@ CTA = ('<section class="section section--ink" id="contact-cta">'
  '<p class="muted" style="max-width:48ch;margin-top:1.4rem">Send your tech pack, quantities and '
  'timings. We will come back with an honest answer on whether we are the right unit for it.</p>'
  '<div class="btns"><a class="btn" href="contact.html" '
- 'style="background:#fff;color:#111111;border-color:#fff">Request a quote</a>'
+ 'style="background:#fff;color:#121314;border-color:#fff">Request a quote</a>'
  '<a class="btn" href="mailto:sales@wf2f.in" '
  'style="background:transparent;color:#fff;border-color:rgba(255,255,255,.5)">sales@wf2f.in</a>'
  '</div></div></section>')
@@ -301,6 +341,19 @@ HOME_PAGE = """
 </section>
 
 <section class="wrap" style="padding-bottom:var(--s-m)">%(keys)s</section>
+
+<section class="section--tint" style="padding-block:clamp(1.75rem,3vw,2.5rem)">
+  <div class="wrap" style="padding-inline:0">%(logoband)s</div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow" data-rise>Our products</span>
+    <h2 data-rise style="margin-bottom:1.8rem">What we make</h2>
+  </div>
+  <div class="wrap" style="padding-inline:0">%(tabsband)s</div>
+  <div class="wrap"><div class="btns"><a class="btn btn--ghost" href="products.html">See the full range</a></div></div>
+</section>
 
 <section class="section section--tint">
   <div class="wrap">
@@ -325,22 +378,13 @@ HOME_PAGE = """
 
 <section class="section section--tint">
   <div class="wrap">
-    <span class="eyebrow" data-rise>Our products</span>
-    <h2 data-rise style="margin-bottom:1.8rem">What we make</h2>
-    <div data-rise>%(tabs)s</div>
-    <div class="btns"><a class="btn btn--ghost" href="products.html">See the full range</a></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap">
     <span class="eyebrow" data-rise>Inside the unit</span>
     <h2 data-rise style="margin-bottom:2rem">Where it<br>is made</h2>
     <div class="gal" data-pswp data-rise>%(gal)s</div>
   </div>
 </section>
 
-<section class="section section--tint">
+<section class="section">
   <div class="wrap g2">
     <div data-rise>
       <span class="eyebrow">At a glance</span>
@@ -355,8 +399,9 @@ HOME_PAGE = """
 %(cta)s
 """ % {"hero": pic("fac-hero","The stitching floor at the Women Fiber to Fashion unit in New Delhi",
                    eager=True, sizes="(min-width:900px) 46vw, 100vw"),
-       "keys": KEYS, "clients": clientwall(), "markets": marketgrid(), "steps": steplist(),
-       "tabs": TABS, "gal": gallery(FACTORY_GAL), "spec": speclist(), "cta": CTA}
+       "keys": KEYS, "logoband": logoband(), "tabsband": TABS_BAND,
+       "clients": clientwall(), "markets": marketgrid(), "steps": steplist(),
+       "gal": gallery(FACTORY_GAL), "spec": speclist(), "cta": CTA}
 
 PRODUCTS_PAGE = """
 <section class="section">
