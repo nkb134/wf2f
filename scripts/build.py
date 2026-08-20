@@ -292,7 +292,9 @@ APPAREL = [("ap-01","Black midi dress with gathered sleeves"), ("ap-10","Striped
  ("ap-07","Denim workwear jacket and jeans"),
  ("re-02","Ikat print kaftan dress"),
  ("re-03","Ikat print shirt, flat lay"),
- ("re-04","Ikat print co-ord photographed outdoors")]
+ ("re-04","Ikat print co-ord photographed outdoors"),
+ ("ap-14","Olive linen jumpsuit with button placket"), ("ap-15","Pink oversized shirt with wide cuffs"),
+ ("ap-16","Red linen shirt and shorts co-ord"), ("ap-17","Teal cami top and trousers set")]
 HOME = [("hm-01","Cushion covers in assorted weaves and prints"),
  ("hm-02","Neutral textured cushion covers"),
  ("product-tote-bag","Olive green cotton tote bag"),
