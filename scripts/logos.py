@@ -49,25 +49,44 @@ def main():
             print("  missing source:", fname); continue
         im = Image.open(p).convert("RGBA")
         a = np.array(im); al = a[..., 3]
-        if al.min() == 255:                      # opaque file: derive alpha from ink
+        opaque = al.min() == 255
+        if opaque:                               # no alpha channel: ink is the dark pixels
             rgb = a[..., :3].astype(np.int16)
-            d = 255 - rgb.min(axis=2)
-            al = np.clip(d * 255 / 40, 0, 255).astype(np.uint8)
-            al[al < 14] = 0
-        # silhouette: colour comes from INK, shape from alpha, so white-on-
-        # transparent artwork works exactly like black-on-transparent
-        out = np.dstack([np.full(al.shape, c, np.uint8) for c in INK_RGB] + [al])
-        im2 = Image.fromarray(out)
+            mask = (255 - rgb.min(axis=2)) > 24
+        else:
+            mask = al > 24
+        ys, xs = np.where(mask)
+        if len(xs) == 0:
+            print("  no ink found:", fname); continue
+        x0, x1, y0, y1 = xs.min(), xs.max() + 1, ys.min(), ys.max() + 1
         cut = CROP_LEFT.get(slug)
         if cut:
-            im2 = im2.crop((int(im2.width * cut), 0, im2.width, im2.height))
-        bb = im2.getbbox()
-        if bb: im2 = im2.crop(bb)
-        ar = im2.width / im2.height
+            x0 = max(x0, int(im.width * cut))
+        im = im.crop((x0, y0, x1, y1))
+
+        ar = im.width / im.height
         h = K / math.sqrt(ar); w = h * ar
-        s = min(MAXW / w, MAXH / h, 1.0)
-        cw, chh = max(1, round(w * s)), max(1, round(h * s))
-        im2.resize((cw * 2, chh * 2), Image.LANCZOS).save(OUT / f"{slug}.png", optimize=True)
+        sc = min(MAXW / w, MAXH / h, 1.0)
+        cw, chh = max(1, round(w * sc)), max(1, round(h * sc))
+
+        # Resize the artwork FIRST, then derive the silhouette at final size.
+        # Silhouetting first and downscaling averages the alpha channel, which
+        # dissolves thin strokes into semi-transparency — the logos came out
+        # washed out and hollow, worst on the most heavily scaled marks.
+        im = im.resize((cw * 2, chh * 2), Image.LANCZOS)
+        a = np.array(im)
+        if opaque:
+            rgb = a[..., :3].astype(np.int16)
+            alpha = np.clip((255 - rgb.min(axis=2)) * 255.0 / 90, 0, 255)
+        else:
+            alpha = a[..., 3].astype(np.float32)
+            peak = alpha.max()
+            if peak > 0:
+                alpha = np.clip(alpha * (255.0 / peak), 0, 255)
+        alpha[alpha < 12] = 0
+        alpha = alpha.astype(np.uint8)
+        out = np.dstack([np.full(alpha.shape, c, np.uint8) for c in INK_RGB] + [alpha])
+        Image.fromarray(out).save(OUT / f"{slug}.png", optimize=True)
         dims[slug] = [cw, chh]
         print(f"  {slug:<20}{cw}x{chh} css   ar={ar:5.1f}   {(OUT / (slug + '.png')).stat().st_size // 1024}KB")
     (ROOT / "scripts" / "logodims.json").write_text(json.dumps(dims, indent=1))
