@@ -289,12 +289,10 @@ APPAREL = [("ap-01","Black midi dress with gathered sleeves"), ("ap-10","Striped
  ("ap-06","Indigo belted jacket and shorts co-ord"), ("ap-05","Sleeveless white overshirt"),
  ("ap-08","Black cotton dress with puff sleeves"), ("ap-09","Oversized linen blazer"),
  ("ap-04","White shirt worn with straight-leg denim"), ("ap-02","Tailored black blazer and trousers"),
- ("ap-07","Denim workwear jacket and jeans")]
-
-RESORT = [("re-01","Block-printed co-ord photographed on location"),
- ("re-02","Ikat print kaftan dress"),("re-03","Ikat print shirt, flat lay"),
+ ("ap-07","Denim workwear jacket and jeans"),
+ ("re-02","Ikat print kaftan dress"),
+ ("re-03","Ikat print shirt, flat lay"),
  ("re-04","Ikat print co-ord photographed outdoors")]
-
 HOME = [("hm-01","Cushion covers in assorted weaves and prints"),
  ("hm-02","Neutral textured cushion covers"),
  ("product-tote-bag","Olive green cotton tote bag"),
@@ -337,23 +335,18 @@ KEYS = ('<div class="keys" data-rise>'
 TABS_TPL = ('<div data-tabs>'
  '<div class="tabs" role="tablist" aria-label="Product categories">'
  '<button class="tab" role="tab" id="t-ap" aria-controls="p-ap" aria-selected="true">Apparel</button>'
- '<button class="tab" role="tab" id="t-re" aria-controls="p-re" aria-selected="false" tabindex="-1">Prints &amp; Resort</button>'
  '<button class="tab" role="tab" id="t-hm" aria-controls="p-hm" aria-selected="false" tabindex="-1">Home &amp; Accessories</button>'
  '</div>'
  '<div class="panel" id="p-ap" role="tabpanel" aria-labelledby="t-ap">%s</div>'
- '<div class="panel" id="p-re" role="tabpanel" aria-labelledby="t-re" hidden>%s</div>'
  '<div class="panel" id="p-hm" role="tabpanel" aria-labelledby="t-hm" hidden>%s</div>'
  '</div>')
 
-TABS = TABS_TPL % (prodgrid(APPAREL, "Apparel"), prodgrid(RESORT, "Prints &amp; Resort"),
-                   prodgrid(HOME, "Home &amp; Accessories"))
+TABS = TABS_TPL % (prodgrid(APPAREL, "Apparel"), prodgrid(HOME, "Home &amp; Accessories"))
 TABS_BAND = TABS_TPL.replace('id="t-ap"','id="b-ap"').replace('aria-controls="p-ap"','aria-controls="q-ap"')\
-    .replace('id="t-re"','id="b-re"').replace('aria-controls="p-re"','aria-controls="q-re"')\
     .replace('id="t-hm"','id="b-hm"').replace('aria-controls="p-hm"','aria-controls="q-hm"')\
     .replace('id="p-ap" role="tabpanel" aria-labelledby="t-ap"','id="q-ap" role="tabpanel" aria-labelledby="b-ap"')\
-    .replace('id="p-re" role="tabpanel" aria-labelledby="t-re"','id="q-re" role="tabpanel" aria-labelledby="b-re"')\
     .replace('id="p-hm" role="tabpanel" aria-labelledby="t-hm"','id="q-hm" role="tabpanel" aria-labelledby="b-hm"')\
-    % (prodband(APPAREL), prodband(RESORT), prodband(HOME))
+    % (prodband(APPAREL), prodband(HOME))
 
 CTA = ('<section class="section section--ink" id="contact-cta">'
  '<div class="wrap"><span class="eyebrow">Start a conversation</span>'
