@@ -1,8 +1,4 @@
 {
- "arohi": [
-  92,
-  42
- ],
  "cloth-and-co": [
   179,
   21
@@ -18,5 +14,33 @@
  "uvaacha": [
   123,
   31
+ ],
+ "arohi": [
+  92,
+  42
+ ],
+ "wandering-silk": [
+  109,
+  35
+ ],
+ "tatsat": [
+  125,
+  31
+ ],
+ "mosambae": [
+  132,
+  29
+ ],
+ "pyjama-project": [
+  156,
+  25
+ ],
+ "baya": [
+  69,
+  56
+ ],
+ "swiatlo": [
+  65,
+  58
  ]
 }

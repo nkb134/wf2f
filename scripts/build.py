@@ -19,7 +19,7 @@ NAV = [("products.html", "Products"), ("capabilities.html", "Capabilities"),
 CLIENTS = [("Cloth &amp; Co", "Australia"), ("La-Eva", "United Kingdom"),
            ("Loft &amp; Daughter", "United Kingdom"), ("House of Wandering Silk", "India"),
            ("Uvaacha Studio", "India"), ("Arohi", "India"), ("Tatsat", "India"),
-           ("Pyjama Project", "Australia"), ("Swaitlo", "India"),
+           ("Pyjama Project", "Australia"), ("Swiatlo", "India"),
            ("Baya Labels", "India"), ("Mosambae", "India")]
 
 MARKETS = [("USA", "Export orders shipped door to door"),
@@ -51,7 +51,9 @@ def gallery(items):
     return "".join(out)
 
 LOGO_FILES = {"Cloth &amp; Co":"cloth-and-co","La-Eva":"la-eva",
- "Loft &amp; Daughter":"loft-and-daughter","Uvaacha Studio":"uvaacha","Arohi":"arohi"}
+ "Loft &amp; Daughter":"loft-and-daughter","Uvaacha Studio":"uvaacha","Arohi":"arohi",
+ "House of Wandering Silk":"wandering-silk","Tatsat":"tatsat","Mosambae":"mosambae",
+ "Pyjama Project":"pyjama-project","Baya Labels":"baya","Swiatlo":"swiatlo"}
 
 def logoband():
     """Auto-scrolling client band. Real logo files where we have them, set
@@ -90,6 +92,17 @@ def clientwall():
 
 def marketgrid():
     return "".join('<div class="market"><b>%s</b><span>%s</span></div>' % (n, d) for n, d in MARKETS)
+
+def prodgrid(items):
+    """Static, browsable grid — every image opens in the lightbox. Used on the
+    Products page, where people are comparing pieces rather than glancing."""
+    out=[]
+    for name,alt in items:
+        w,h=DIMS[name]
+        out.append('<a href="assets/img/%s.jpg" data-pswp-width="%d" data-pswp-height="%d" '
+                   'target="_blank" rel="noreferrer">%s</a>'
+                   % (name,w,h,pic(name,alt,sizes="(min-width:980px) 24vw, (min-width:620px) 46vw, 92vw")))
+    return '<div class="gal gal--prod" data-pswp>%s</div>' % "".join(out)
 
 def carousel(cid, items):
     return ('<div class="carousel" data-carousel>'
@@ -152,7 +165,7 @@ def page(slug, title, desc, body, pswp=False):
 <title>%(title)s</title>
 <meta name="description" content="%(desc)s">
 <link rel="canonical" href="%(canon)s">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#F7F4EF">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Women Fiber to Fashion">
 <meta property="og:locale" content="en_IN">
@@ -303,7 +316,7 @@ TABS_TPL = ('<div data-tabs>'
  '<div class="panel" id="p-hm" role="tabpanel" aria-labelledby="t-hm" hidden>%s</div>'
  '</div>')
 
-TABS = TABS_TPL % (carousel("ap", APPAREL), carousel("re", RESORT), carousel("hm", HOME))
+TABS = TABS_TPL % (prodgrid(APPAREL), prodgrid(RESORT), prodgrid(HOME))
 TABS_BAND = TABS_TPL.replace('id="t-ap"','id="b-ap"').replace('aria-controls="p-ap"','aria-controls="q-ap"')\
     .replace('id="t-re"','id="b-re"').replace('aria-controls="p-re"','aria-controls="q-re"')\
     .replace('id="t-hm"','id="b-hm"').replace('aria-controls="p-hm"','aria-controls="q-hm"')\
@@ -318,7 +331,7 @@ CTA = ('<section class="section section--ink" id="contact-cta">'
  '<p class="muted" style="max-width:48ch;margin-top:1.4rem">Send your tech pack, quantities and '
  'timings. We will come back with an honest answer on whether we are the right unit for it.</p>'
  '<div class="btns"><a class="btn" href="contact.html" '
- 'style="background:#fff;color:#121314;border-color:#fff">Request a quote</a>'
+ 'style="background:#F7F4EF;color:#1F1E1C;border-color:#F7F4EF">Request a quote</a>'
  '<a class="btn" href="mailto:sales@wf2f.in" '
  'style="background:transparent;color:#fff;border-color:rgba(255,255,255,.5)">sales@wf2f.in</a>'
  '</div></div></section>')
@@ -342,10 +355,6 @@ HOME_PAGE = """
 
 <section class="wrap" style="padding-bottom:var(--s-m)">%(keys)s</section>
 
-<section class="section--tint" style="padding-block:clamp(1.75rem,3vw,2.5rem)">
-  <div class="wrap" style="padding-inline:0">%(logoband)s</div>
-</section>
-
 <section class="section">
   <div class="wrap">
     <span class="eyebrow" data-rise>Our products</span>
@@ -358,7 +367,10 @@ HOME_PAGE = """
 <section class="section section--tint">
   <div class="wrap">
     <span class="eyebrow" data-rise>Trusted by</span>
-    <h2 data-rise style="margin-bottom:2rem">Brands we<br>manufacture for</h2>
+    <h2 data-rise style="margin-bottom:1.8rem">Brands we<br>manufacture for</h2>
+  </div>
+  <div class="wrap" style="padding-inline:0;margin-bottom:2.25rem">%(logoband)s</div>
+  <div class="wrap">
     <div class="clients" data-rise>%(clients)s</div>
     <span class="eyebrow" data-rise style="margin-top:var(--s-m)">Where we ship</span>
     <div class="markets" data-rise>%(markets)s</div>
