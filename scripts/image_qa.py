@@ -21,7 +21,11 @@ BAND_UNIFORM  = 30    # std below this = uniform enough to be a border
 BAND_JUMP     = 25    # tonal step at the boundary that marks a real edge
 CLIP_LO       = 8.0   # % pure black tolerated
 CLIP_HI       = 6.0   # % pure white tolerated
-WEBP_BUDGET   = 140   # KB, per image
+WEBP_BUDGET   = 140   # KB, per gallery image
+# Full-bleed images earn a higher ceiling — they are rendered at viewport width,
+# so the gallery budget would force real detail loss. Chasing a flat number is
+# how re-04 ended up re-encoded at quality 50.
+BUDGET_OVER   = {"hero": 240, "re-04": 210}
 SKIP          = ("og-image",)
 
 def edge_bands(gray):
@@ -86,8 +90,9 @@ def main():
         else:
             kb = os.path.getsize(webp) // 1024
             total_webp += kb
-            if kb > WEBP_BUDGET:
-                notes.append(f"{slug}: webp {kb}KB over the {WEBP_BUDGET}KB budget")
+            budget = BUDGET_OVER.get(slug, WEBP_BUDGET)
+            if kb > budget:
+                notes.append(f"{slug}: webp {kb}KB over the {budget}KB budget")
             if show_budget:
                 print(f"  {slug:<26}{im.width}x{im.height:<6} {kb:>4}KB webp")
 
