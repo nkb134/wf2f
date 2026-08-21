@@ -3,7 +3,8 @@
 node_modules/
 .vscode/
 .idea/
-.claude/
+.claude/*
+!.claude/settings.json
 
 # Original photography — kept locally, not published
 assets/Website images/
