@@ -299,9 +299,16 @@ APPAREL = [("ap-01","Black midi dress with gathered sleeves"), ("ap-10","Striped
  ("re-03","Ikat print shirt, flat lay"),
  ("re-04","Ikat print co-ord photographed outdoors"),
  ("ap-14","Olive linen jumpsuit with button placket"), ("ap-15","Pink oversized shirt with wide cuffs"),
- ("ap-16","Red linen shirt and shorts co-ord"), ("ap-17","Teal cami top and trousers set")]
-HOME = [("hm-01","Cushion covers in assorted weaves and prints"),
+ ("ap-16","Red linen shirt and shorts co-ord"), ("ap-17","Teal cami top and trousers set"),
+ ("ap-18","Block-print pyjama trousers with a white tee"), ("ap-19","Block-print lounge set"),
+ ("ap-20","Gathered-waist dress in stone cotton"), ("ap-21","Block-print tunic")]
+HOME = [("hm-07","Tan cotton tote bag"),
+ ("hm-05","Tasselled scarves in natural and blush"),
+ ("hm-03","Stack of fringed throws"),
+ ("hm-04","Fringed cushion covers, stacked"),
+ ("hm-06","Block-print table linen with paisley border"),
  ("hm-02","Neutral textured cushion covers"),
+ ("hm-01","Cushion covers in assorted weaves and prints"),
  ("product-tote-bag","Olive green cotton tote bag"),
  ("product-drawstring-bag","Natural cotton drawstring bag")]
 
@@ -368,18 +375,17 @@ CTA = ('<section class="section section--ink" id="contact-cta">'
 
 HOME_PAGE = """
 <section class="hero">
-  <div class="wrap hero__grid">
-    <div>
-      <span class="eyebrow">New Delhi, India &middot; Shipping worldwide</span>
-      <h1>Garment<br>manufacturing<br>for brands<br>worldwide</h1>
-      <p class="lede">Womenswear, menswear, home linen and accessories &mdash; woven and
-      knitted, made to order with flexible MOQs.</p>
-      <div class="btns">
-        <a class="btn" href="contact.html">Request a quote</a>
-        <a class="btn btn--ghost" href="capabilities.html">Our capabilities</a>
-      </div>
+  %(hero)s
+  <div class="hero__scrim"></div>
+  <div class="wrap hero__in">
+    <span class="eyebrow">New Delhi, India &middot; Shipping worldwide</span>
+    <h1>Garment<br>manufacturing<br>for brands<br>worldwide</h1>
+    <p class="lede">Womenswear, menswear, home linen and accessories &mdash; woven and
+    knitted, made to order with flexible MOQs.</p>
+    <div class="btns">
+      <a class="btn btn--light" href="contact.html">Request a quote</a>
+      <a class="btn btn--onphoto" href="capabilities.html">Our capabilities</a>
     </div>
-    <div class="hero__img">%(hero)s</div>
   </div>
 </section>
 
@@ -439,8 +445,8 @@ HOME_PAGE = """
   </div>
 </section>
 %(cta)s
-""" % {"hero": pic("fac-hero","The stitching floor at the Women Fiber to Fashion unit in New Delhi",
-                   eager=True, sizes="(min-width:900px) 46vw, 100vw"),
+""" % {"hero": pic("hero","Cutting and marking fabric at the Women Fiber to Fashion unit in New Delhi",
+                   eager=True, sizes="100vw"),
        "keys": KEYS, "logoband": logoband(), "tabsband": TABS_BAND,
        "clients": clientwall(), "markets": marketgrid(), "steps": steplist(),
        "gal": gallery(FACTORY_GAL), "spec": speclist(), "cta": CTA}
