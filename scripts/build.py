@@ -25,6 +25,7 @@ CLIENTS = [("Cloth &amp; Co", "Australia"), ("La-Eva", "United Kingdom"),
 MARKETS = [("USA", "Export orders shipped door to door"),
            ("Europe", "Including the United Kingdom"),
            ("Australia &amp; NZ", "Long-standing accounts"),
+           ("Middle East", "Including Dubai and the UAE"),
            ("India", "Domestic labels and studios")]
 
 def pic(name, alt, ratio=None, eager=False, sizes="100vw"):
@@ -166,12 +167,13 @@ def schema():
       "email": "sales@wf2f.in",
       "description": ("Garment manufacturer in New Delhi, India. Womenswear, menswear, home "
                       "linen and accessories for brands in the USA, Europe, Australia, New "
-                      "Zealand and India. 200-piece minimums, 10,000-12,000 pieces a month."),
+                      "Zealand, the Middle East and India. 100-piece minimums, 10,000-12,000 pieces a month."),
       "address": {"@type": "PostalAddress", "addressLocality": "New Delhi", "addressCountry": "IN"},
       "contactPoint": {"@type": "ContactPoint", "contactType": "sales", "email": "sales@wf2f.in",
-                       "availableLanguage": ["en", "hi"], "areaServed": ["US", "GB", "AU", "NZ", "IN"]},
+                       "availableLanguage": ["en", "hi"], "areaServed": ["US", "GB", "AU", "NZ", "AE", "IN"]},
       "areaServed": [{"@type": "Country", "name": n} for n in
-                     ["United States", "United Kingdom", "Australia", "New Zealand", "India"]],
+                     ["United States", "United Kingdom", "Australia", "New Zealand",
+                      "United Arab Emirates", "India"]],
       "knowsAbout": ["Garment manufacturing", "Womenswear manufacturing", "Menswear manufacturing",
                      "Home linen", "Tote bags and accessories", "Private label apparel",
                      "Low MOQ clothing manufacturing"],
@@ -229,8 +231,8 @@ def page(slug, title, desc, body, pswp=False):
 <header class="hdr">
   <div class="hdr__in">
     <a class="hdr__logo" href="index.html">
-      <img src="assets/img/logo-240.png" alt="" width="240" height="238">
-      <b>Women Fiber<br>to Fashion</b>
+      <img src="assets/img/mark.png" alt="" width="35" height="96">
+      <b>Women Fiber to Fashion</b>
     </a>
     <nav class="nav" id="nav" aria-label="Main">%(nav)s</nav>
     <a class="hdr__cta" href="contact.html">Contact us</a>
@@ -247,10 +249,13 @@ def page(slug, title, desc, body, pswp=False):
 
 <footer class="ftr">
   <div class="wrap">
-    <img src="assets/img/logo-light-480.png" alt="Women Fiber to Fashion" width="480" height="476">
+    <a class="ftr__mark" href="index.html">
+      <img src="assets/img/mark-light.png" alt="" width="35" height="96">
+      <b>Women Fiber to Fashion</b>
+    </a>
     <div class="g2" style="align-items:start">
       <div>
-        <h4>Women Fiber to Fashion</h4>
+        <h4>What we do</h4>
         <p style="max-width:38ch">Garment manufacturing in New Delhi, India. Womenswear,
         menswear, home linen and accessories &mdash; made to order, shipped worldwide.</p>
       </div>
@@ -309,8 +314,8 @@ FACTORY_GAL = [("fac-floor-1","Stitching floor at the New Delhi unit"),
  ("fac-floor-2","Wide view of the production floor")]
 
 STEPS = [("Sampling","Pattern development and prototyping from your tech pack or a reference sample."),
- ("Fabric sourcing","In-house sourcing across cotton, linen, viscose and blends &mdash; or work to your nominated mill."),
- ("Stitching","Woven and knitted production across womenswear, menswear, home linen and accessories."),
+ ("Fabric sourcing","Expert in sourcing both artisanal and mill-made fabrics &mdash; or we work to your nominated mill."),
+ ("Stitching","Production across womenswear, menswear, home linen and accessories."),
  ("Finishing","Pressing, trims, labelling and the detail work that decides how a garment hangs."),
  ("Quality control","Inline, mid-line and final inspection. Every piece checked before packing."),
  ("Packing &amp; export","Custom labels, hang tags and export-ready packing. Shipped door to door.")]
@@ -318,7 +323,7 @@ STEPS = [("Sampling","Pattern development and prototyping from your tech pack or
 def steplist():
     return "".join("<li><h3>%s</h3><p>%s</p></li>" % (t, d) for t, d in STEPS)
 
-SPEC = [("Minimum order","200 pieces and above"),("Monthly capacity","10,000&ndash;12,000 pieces"),
+SPEC = [("Minimum order","100 pieces and above"),("Monthly capacity","10,000&ndash;12,000 pieces"),
  ("Machines","50+ sewing machines"),("Turnaround","Fast turnaround"),
  ("Quality control","Inline, mid-line &amp; final &mdash; 100% checked"),
  ("Fabric","Sourcing available in-house"),
@@ -329,10 +334,10 @@ def speclist():
     return "".join("<li><b>%s</b><span>%s</span></li>" % (a, b) for a, b in SPEC)
 
 KEYS = ('<div class="keys" data-rise>'
- '<div class="key"><b>200</b><span>Piece minimum</span></div>'
+ '<div class="key"><b>100</b><span>Piece minimum</span></div>'
  '<div class="key"><b>10&ndash;12k</b><span>Pieces per month</span></div>'
  '<div class="key"><b>50+</b><span>Sewing machines</span></div>'
- '<div class="key"><b>4</b><span>Markets served</span></div></div>')
+ '<div class="key"><b>5</b><span>Markets served</span></div></div>')
 
 TABS_TPL = ('<div data-tabs>'
  '<div class="tabs" role="tablist" aria-label="Product categories">'
@@ -368,7 +373,7 @@ HOME_PAGE = """
       <span class="eyebrow">New Delhi, India &middot; Shipping worldwide</span>
       <h1>Garment<br>manufacturing<br>for brands<br>worldwide</h1>
       <p class="lede">Womenswear, menswear, home linen and accessories &mdash; woven and
-      knitted, made to order from 200 pieces.</p>
+      knitted, made to order with flexible MOQs.</p>
       <div class="btns">
         <a class="btn" href="contact.html">Request a quote</a>
         <a class="btn btn--ghost" href="capabilities.html">Our capabilities</a>
@@ -485,7 +490,7 @@ CAPS_PAGE = """
   <div class="wrap">
     <span class="eyebrow" data-rise>Capabilities</span>
     <h1 data-rise style="font-size:clamp(1.9rem,5vw,3.6rem)">Built for<br>small batches</h1>
-    <p class="lede" data-rise style="margin-top:1.3rem">200-piece minimums, 10,000&ndash;12,000
+    <p class="lede" data-rise style="margin-top:1.3rem">100-piece minimums, 10,000&ndash;12,000
     pieces a month, and quality checked at three stages rather than one.</p>
   </div>
 </section>
@@ -543,9 +548,9 @@ ABOUT_PAGE = """
 <section class="section">
   <div class="wrap">
     <span class="eyebrow" data-rise>About</span>
-    <h1 data-rise style="font-size:clamp(1.9rem,5vw,3.6rem)">A women-led<br>unit in<br>New Delhi</h1>
+    <h1 data-rise style="font-size:clamp(1.9rem,5vw,3.6rem)">A garment<br>unit in<br>New Delhi</h1>
     <p class="lede" data-rise style="margin-top:1.3rem">We manufacture womenswear, menswear, home
-    linen and accessories for independent labels and established brands across four markets.</p>
+    linen and accessories for independent labels and established brands across five markets.</p>
   </div>
 </section>
 
@@ -561,9 +566,8 @@ ABOUT_PAGE = """
     </div>
     <div data-rise>
       <hr class="rule">
-      <p>Our unit is women-led and women-staffed. Every machinist completes more than 160 hours
-      of formal training before working on bulk production, and we have trained over 300 women
-      to date.</p>
+      <p>Every machinist completes more than 160 hours of formal training before working on bulk
+      production, and we have trained over 300 people to date.</p>
       <p>Retention runs at around 70%% &mdash; high for this industry, and the reason our stitch
       quality stays consistent across repeat orders. A stable floor is a commercial advantage
       before it is anything else.</p>
@@ -577,10 +581,10 @@ ABOUT_PAGE = """
   <div class="wrap">
     <span class="eyebrow" data-rise>By the numbers</span>
     <div class="keys" data-rise style="margin-top:1.5rem">
-      <div class="key"><b>300+</b><span>Women trained</span></div>
+      <div class="key"><b>300+</b><span>People trained</span></div>
       <div class="key"><b>70%%</b><span>Retention rate</span></div>
       <div class="key"><b>160+</b><span>Training hours each</span></div>
-      <div class="key"><b>100%%</b><span>Women-led production</span></div>
+      <div class="key"><b>100%%</b><span>Quality checked</span></div>
     </div>
   </div>
 </section>
@@ -645,7 +649,7 @@ CONTACT_PAGE = """
       </div>
       <div class="field"><label for="message">About your programme</label>
         <textarea id="message" name="message" required></textarea>
-        <small>Minimum order is 200 pieces. Fabric sourcing is available in-house.</small></div>
+        <small>Minimum order is 100 pieces. Fabric sourcing is available in-house.</small></div>
       <div class="status" id="formstatus" role="status" aria-live="polite"></div>
       <div><button class="btn" type="submit">Send enquiry</button></div>
       <p class="muted" style="font-size:.85rem">We use your details only to reply to this enquiry.</p>
@@ -658,7 +662,7 @@ CONTACT_PAGE = """
       <span class="eyebrow" style="margin-top:2rem">Email</span>
       <p><a href="mailto:sales@wf2f.in">sales@wf2f.in</a></p>
       <span class="eyebrow" style="margin-top:2rem">Markets</span>
-      <p class="muted">USA &middot; Europe &middot; Australia &amp; New Zealand &middot; India</p>
+      <p class="muted">USA &middot; Europe &middot; Australia &amp; New Zealand &middot; Middle East &middot; India</p>
       <span class="eyebrow" style="margin-top:2rem">Elsewhere</span>
       SOCIALBLOCK
       <span class="eyebrow" style="margin-top:2rem">Response time</span>
@@ -684,15 +688,15 @@ NOTFOUND = """
 
 PAGES = [
  ("index.html","Garment Manufacturer in New Delhi | Women Fiber to Fashion",
-  "Garment manufacturer in New Delhi producing womenswear, menswear, home linen and accessories for brands in the USA, Europe, Australia and India. 200-piece minimums, 10,000-12,000 pieces a month.",HOME_PAGE,True),
+  "Garment manufacturer in New Delhi producing womenswear, menswear, home linen and accessories for brands in the USA, Europe, Australia, the Middle East and India. 100-piece minimums, 10,000-12,000 pieces a month.",HOME_PAGE,True),
  ("products.html","Products | Womenswear, Menswear, Home Linen & Accessories",
   "Woven and knitted garments, home linen, tote bags and accessories manufactured at our New Delhi unit for brands worldwide.",PRODUCTS_PAGE,False),
  ("capabilities.html","Capabilities | Low MOQ Garment Manufacturing, New Delhi",
-  "200-piece minimums, 10,000-12,000 pieces a month, 50+ machines, inline mid-line and final quality control, in-house fabric sourcing and export shipping.",CAPS_PAGE,True),
- ("about.html","About | Women-Led Garment Manufacturing in New Delhi",
-  "A women-led garment manufacturing unit in New Delhi with a trained, stable workforce and a transparent supply chain, serving brands across four markets.",ABOUT_PAGE,True),
+  "100-piece minimums, 10,000-12,000 pieces a month, 50+ machines, inline mid-line and final quality control, in-house fabric sourcing and export shipping.",CAPS_PAGE,True),
+ ("about.html","About | Garment Manufacturing in New Delhi",
+  "A garment manufacturing unit in New Delhi with a trained, stable workforce and a transparent supply chain, serving brands across five markets.",ABOUT_PAGE,True),
  ("contact.html","Contact | Request a Quote",
-  "Request a manufacturing quote from our New Delhi unit. Minimum order 200 pieces, fast turnaround, international shipping.",CONTACT_PAGE,False),
+  "Request a manufacturing quote from our New Delhi unit. Minimum order 100 pieces, fast turnaround, international shipping.",CONTACT_PAGE,False),
  ("404.html","Page not found","Page not found.",NOTFOUND,False),
 ]
 
