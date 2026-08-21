@@ -139,8 +139,14 @@ p{margin:0 0 1.1em}
    while staying inside the first fold, so the band is deliberately tighter
    than --s-s, and the section that follows gives up some of its own top
    padding rather than the two stacking into a chasm. */
-.keys-band{padding-block:clamp(1.4rem,3vw,2.25rem)}
+.keys-band{padding-top:clamp(1.5rem,3vw,2.25rem);
+  padding-bottom:clamp(1.9rem,3.6vw,2.9rem)}
 .keys-band + .section{padding-top:var(--s-m)}
+/* Header + hero + strip comes to ~776px, so a short viewport has almost no
+   room to spare. Rather than let the figures slide under the fold, the gap
+   above them yields first — the gap below is what separates the strip from
+   the next section and it keeps its full size. */
+@media(max-height:900px){.keys-band{padding-top:1.05rem}}
 .keys{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line);border-radius:2px;overflow:hidden}
 @media(min-width:720px){.keys{grid-template-columns:repeat(4,1fr)}}
