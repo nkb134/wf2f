@@ -167,7 +167,7 @@ def schema():
       "email": "sales@wf2f.in",
       "description": ("Garment manufacturer in New Delhi, India. Womenswear, menswear, home "
                       "linen and accessories for brands in the USA, Europe, Australia, New "
-                      "Zealand, the Middle East and India. 100-piece minimums, 10,000-12,000 pieces a month."),
+                      "Zealand, the Middle East and India. 100-piece minimums, 12,000-15,000 pieces a month."),
       "address": {"@type": "PostalAddress", "addressLocality": "New Delhi", "addressCountry": "IN"},
       "contactPoint": {"@type": "ContactPoint", "contactType": "sales", "email": "sales@wf2f.in",
                        "availableLanguage": ["en", "hi"], "areaServed": ["US", "GB", "AU", "NZ", "AE", "IN"]},
@@ -323,7 +323,7 @@ STEPS = [("Sampling","Pattern development and prototyping from your tech pack or
 def steplist():
     return "".join("<li><h3>%s</h3><p>%s</p></li>" % (t, d) for t, d in STEPS)
 
-SPEC = [("Minimum order","100 pieces and above"),("Monthly capacity","10,000&ndash;12,000 pieces"),
+SPEC = [("Minimum order","100 pieces and above"),("Monthly capacity","12,000&ndash;15,000 pieces"),
  ("Machines","50+ sewing machines"),("Turnaround","Fast turnaround"),
  ("Quality control","Inline, mid-line &amp; final &mdash; 100% checked"),
  ("Fabric","Sourcing available in-house"),
@@ -334,8 +334,8 @@ def speclist():
     return "".join("<li><b>%s</b><span>%s</span></li>" % (a, b) for a, b in SPEC)
 
 KEYS = ('<div class="keys" data-rise>'
- '<div class="key"><b>100</b><span>Piece minimum</span></div>'
- '<div class="key"><b>10&ndash;12k</b><span>Pieces per month</span></div>'
+ '<div class="key"><b>100</b><span>Piece MOQ</span></div>'
+ '<div class="key"><b>12&ndash;15k</b><span>Pieces per month</span></div>'
  '<div class="key"><b>50+</b><span>Sewing machines</span></div>'
  '<div class="key"><b>5</b><span>Markets served</span></div></div>')
 
@@ -490,7 +490,7 @@ CAPS_PAGE = """
   <div class="wrap">
     <span class="eyebrow" data-rise>Capabilities</span>
     <h1 data-rise style="font-size:clamp(1.9rem,5vw,3.6rem)">Built for<br>small batches</h1>
-    <p class="lede" data-rise style="margin-top:1.3rem">100-piece minimums, 10,000&ndash;12,000
+    <p class="lede" data-rise style="margin-top:1.3rem">100-piece minimums, 12,000&ndash;15,000
     pieces a month, and quality checked at three stages rather than one.</p>
   </div>
 </section>
@@ -688,11 +688,11 @@ NOTFOUND = """
 
 PAGES = [
  ("index.html","Garment Manufacturer in New Delhi | Women Fiber to Fashion",
-  "Garment manufacturer in New Delhi producing womenswear, menswear, home linen and accessories for brands in the USA, Europe, Australia, the Middle East and India. 100-piece minimums, 10,000-12,000 pieces a month.",HOME_PAGE,True),
+  "Garment manufacturer in New Delhi producing womenswear, menswear, home linen and accessories for brands in the USA, Europe, Australia, the Middle East and India. 100-piece minimums, 12,000-15,000 pieces a month.",HOME_PAGE,True),
  ("products.html","Products | Womenswear, Menswear, Home Linen & Accessories",
   "Woven and knitted garments, home linen, tote bags and accessories manufactured at our New Delhi unit for brands worldwide.",PRODUCTS_PAGE,False),
  ("capabilities.html","Capabilities | Low MOQ Garment Manufacturing, New Delhi",
-  "100-piece minimums, 10,000-12,000 pieces a month, 50+ machines, inline mid-line and final quality control, in-house fabric sourcing and export shipping.",CAPS_PAGE,True),
+  "100-piece minimums, 12,000-15,000 pieces a month, 50+ machines, inline mid-line and final quality control, in-house fabric sourcing and export shipping.",CAPS_PAGE,True),
  ("about.html","About | Garment Manufacturing in New Delhi",
   "A garment manufacturing unit in New Delhi with a trained, stable workforce and a transparent supply chain, serving brands across five markets.",ABOUT_PAGE,True),
  ("contact.html","Contact | Request a Quote",
