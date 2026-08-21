@@ -201,7 +201,7 @@ if (!reduced) {
       <button class="show__nav show__nav--prev" type="button" aria-label="Previous image">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
           <path d="M15 5l-7 7 7 7"/></svg></button>
-      <figure class="show__fig"><img alt=""><figcaption class="show__cap"></figcaption></figure>
+      <figure class="show__fig"><picture><source type="image/webp"><img alt=""></picture><figcaption class="show__cap"></figcaption></figure>
       <button class="show__nav show__nav--next" type="button" aria-label="Next image">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
           <path d="M9 5l7 7-7 7"/></svg></button>
@@ -210,6 +210,7 @@ if (!reduced) {
 
   const tabsWrap = el.querySelector('.show__tabs');
   const img = el.querySelector('.show__fig img');
+  const webp = el.querySelector('.show__fig source');
   const cap = el.querySelector('.show__cap');
   const count = el.querySelector('.show__count');
   const prev = el.querySelector('.show__nav--prev');
@@ -217,16 +218,21 @@ if (!reduced) {
 
   let group = [], gi = 0, i = 0, opener = null;
 
-  const shots = g => [...g.querySelectorAll('a')].map(a => ({
-    src: a.getAttribute('href'),
-    cap: a.dataset.cap || '',
-    w: a.dataset.w, h: a.dataset.h
-  }));
+  const shots = g => [...g.querySelectorAll('a')].map(a => {
+    const s = a.querySelector('source[type="image/webp"]');
+    return {
+      src: a.getAttribute('href'),
+      webp: s ? s.getAttribute('srcset') : '',
+      cap: a.dataset.cap || '',
+      w: a.dataset.w, h: a.dataset.h
+    };
+  });
 
   function render() {
     const items = shots(group[gi]);
     const it = items[i];
     if (!it) return;
+    if (it.webp) webp.srcset = it.webp; else webp.removeAttribute('srcset');
     img.src = it.src;
     img.alt = it.cap;
     if (it.w && it.h) { img.width = it.w; img.height = it.h; }
@@ -267,6 +273,7 @@ if (!reduced) {
     el.removeAttribute('open');
     document.body.classList.remove('show-open');
     img.removeAttribute('src');
+    webp.removeAttribute('srcset');
     if (opener && opener.focus) opener.focus();
   }
 
