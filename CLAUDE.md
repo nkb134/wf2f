@@ -44,15 +44,19 @@ Every image ships as a `.jpg` and a `.webp`; `<picture>` serves WebP first, so
 `scripts/dims.json` must be updated whenever an image is reprocessed. Width and
 height attributes come from it, and drift reintroduces layout shift.
 
-Before committing new imagery, check for:
+Before committing new imagery, run the gate — it checks edge bands, clipping,
+`dims.json` drift in both directions, missing WebP companions, orphaned files
+and the 140KB WebP budget:
 
-- **Edge bands** — a thin uniform strip that *ends* with a sharp tonal jump.
-  Supplied sources (especially WhatsApp) often have them baked in. A uniform
-  run that continues to the scan cap is the seamless backdrop, not a band.
-- **Clipping** — anything over ~8% pure black or ~6% pure white.
+```bash
+/usr/bin/python3 scripts/image_qa.py
+```
 
-Both checks have produced false positives before. A dark garment reaching the
-frame edge is not a band; verify the profile before cropping.
+Exit 1 blocks the commit; *notes* are advisory. The `/image-qa` skill explains
+what each threshold is protecting against and why loosening one is usually
+wrong. Both the band and clipping checks have produced false positives before —
+a dark garment reaching the frame edge is not a band, so look at a flagged crop
+before cropping it.
 
 ## Palette
 

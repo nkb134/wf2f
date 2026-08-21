@@ -1,8 +1,4 @@
 {
- "fac-hero": [
-  2000,
-  1333
- ],
  "fac-fitting": [
   1200,
   1562
@@ -10,10 +6,6 @@
  "fac-team": [
   1200,
   1565
- ],
- "fac-folding": [
-  1000,
-  1301
  ],
  "fac-machinist": [
   1000,
@@ -35,17 +27,9 @@
   1200,
   1500
  ],
- "fac-training": [
-  1200,
-  1500
- ],
  "fac-machine-1": [
   900,
   1200
- ],
- "fac-machine-2": [
-  900,
-  1598
  ],
  "fac-cutting": [
   1200,

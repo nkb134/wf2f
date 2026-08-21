@@ -5,6 +5,8 @@ node_modules/
 .idea/
 .claude/*
 !.claude/settings.json
+!.claude/skills/
+!.claude/skills/**
 
 # Original photography — kept locally, not published
 assets/Website images/
