@@ -64,8 +64,17 @@ p{margin:0 0 1.1em}
 .skip:focus{left:1rem;top:1rem;z-index:200;background:var(--ink);color:var(--bg);padding:.7rem 1.1rem}
 
 /* ---------------- header ---------------- */
+/* No backdrop-filter in the base rule. A filtered ancestor becomes the
+   containing block for position:fixed descendants, which sized the mobile nav
+   panel to the 64px header instead of the viewport: "Products" landed above
+   the screen and "About" fell outside the panel's painted box, so it read as
+   transparent text over the page. The frosted header is desktop-only, where
+   the nav is not fixed. */
 .hdr{position:sticky;top:0;z-index:60;background:rgba(247,244,239,.94);
-  backdrop-filter:saturate(150%) blur(12px);border-bottom:1px solid var(--line)}
+  border-bottom:1px solid var(--line)}
+@media(min-width:941px){
+  .hdr{backdrop-filter:saturate(150%) blur(12px)}
+}
 .hdr__in{max-width:var(--wrap);margin-inline:auto;padding:.6rem var(--gut);
   display:flex;align-items:center;gap:.75rem}
 .hdr__logo{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--ink);margin-right:auto}
@@ -87,6 +96,7 @@ p{margin:0 0 1.1em}
   cursor:pointer;padding:.5rem;color:var(--ink);min-width:44px;min-height:44px;
   align-items:center;justify-content:center}
 @media(max-width:940px){
+  .hdr{background:var(--bg)}
   .burger{display:inline-flex}
   .nav{position:fixed;inset:0 0 0 30%;background:var(--bg);flex-direction:column;
     align-items:flex-start;justify-content:center;gap:1.5rem;padding:2rem var(--gut);
@@ -124,6 +134,13 @@ p{margin:0 0 1.1em}
 }
 
 /* key figures */
+/* The strip sits between the hero and the next section on home and
+   capabilities, where it was flush against both. It needs air on each side
+   while staying inside the first fold, so the band is deliberately tighter
+   than --s-s, and the section that follows gives up some of its own top
+   padding rather than the two stacking into a chasm. */
+.keys-band{padding-block:clamp(1.4rem,3vw,2.25rem)}
+.keys-band + .section{padding-top:var(--s-m)}
 .keys{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);
   border:1px solid var(--line);border-radius:2px;overflow:hidden}
 @media(min-width:720px){.keys{grid-template-columns:repeat(4,1fr)}}

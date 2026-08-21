@@ -389,7 +389,7 @@ HOME_PAGE = """
   </div>
 </section>
 
-<section class="wrap">%(keys)s</section>
+<section class="wrap keys-band">%(keys)s</section>
 
 <section class="section">
   <div class="wrap">
@@ -501,7 +501,7 @@ CAPS_PAGE = """
   </div>
 </section>
 
-<section class="wrap">%(keys)s</section>
+<section class="wrap keys-band">%(keys)s</section>
 
 <section class="section section--tint">
   <div class="wrap">
